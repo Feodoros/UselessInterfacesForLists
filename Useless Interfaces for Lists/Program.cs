@@ -23,7 +23,7 @@ namespace Useless_Interfaces_for_Lists
 
             LinkedList<int> numbers = new LinkedList<int>();
             numbers.AddFirst(0);
-            numbers.AddAfter(numbers.First, 1);
+            numbers.AddAfter(numbers.First, 1);  
             numbers.AddLast(2);
             numbers.AddLast(3);
             void PrintList(LinkedList<int> list1)
