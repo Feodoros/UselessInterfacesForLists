@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Useless_Interfaces_for_Lists
 {
-    class List_Operations : ICollection<int>, IEnumerable<int>
+    class List_Operations<T> : ICollection<T>, IEnumerable<T>
     {
-        public IEnumerator<int> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             if (head == null) yield break;
             var host = head;
@@ -27,17 +27,11 @@ namespace Useless_Interfaces_for_Lists
             tail = head;
         }
 
-        Item_of_List head = new Item_of_List(0), tail;
+        Item_of_List<T> head = new Item_of_List<T>(default(T)), tail;
 
-        public int Count => throw new NotImplementedException();
-
-        public bool IsReadOnly => throw new NotImplementedException();
-
-        public int Current => throw new NotImplementedException();
-
-        public void AddHead(int value)
+        public void AddHead(T value)
         {
-            Item_of_List newHead = new Item_of_List(value /*value1*/)
+            Item_of_List<T> newHead = new Item_of_List<T>(value)
             {
                 next = head,
 
@@ -49,38 +43,46 @@ namespace Useless_Interfaces_for_Lists
 
         private int num = 1;
 
-        public void AddTail(int value /*string value1*/)
-        {
+        public int Count => throw new NotImplementedException();
 
-            Item_of_List newTail = new Item_of_List(value);
+        public bool IsReadOnly => throw new NotImplementedException();
+
+        public void AddTail(T value)
+        {
+            Item_of_List<T> newTail = new Item_of_List<T>(value);
             tail.next = newTail;
             tail = newTail;
             newTail.num = num++;
         }
 
-        public bool TestListAsCollection(List_Operations list1)
+
+
+        public bool TestListAsCollection(List_Operations<T> list1)
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("Какое число возможно содержится в нестандартном списке: ");
-            int x = Int32.Parse(Console.ReadLine());
+            Console.Write("Какой элемент возможно содержится в нестандартном списке: ");
+            var x = (T)Convert.ChangeType(Console.ReadLine(), typeof(T));
             bool found = false;
-            Item_of_List elem = head;
-            while (elem != null)
+            Item_of_List<T> elem = head;
+            var myStopwatch = new System.Diagnostics.Stopwatch();
+            myStopwatch.Start();
+            foreach (T i in list1)
             {
-                if (elem.value == x)
+                if (i.Equals(x))
                 {
                     found = true;
                     break;
                 }
-                elem = elem.next;
             }
+            myStopwatch.Stop();
+            Console.WriteLine("Метод отработал за время {0}", myStopwatch.Elapsed);
             return found;
         }
 
         public void WriteAllValues()
         {
-            Item_of_List elem = head;
+            Item_of_List<T> elem = head;
             while (elem != null)
             {
                 Console.WriteLine(elem.value);
@@ -89,47 +91,28 @@ namespace Useless_Interfaces_for_Lists
         }
 
 
-        public Item_of_List PrintList(List_Operations list1)
+        public Item_of_List<T> PrintList(List_Operations<T> list1)
         {
+            var myStopwatch = new System.Diagnostics.Stopwatch();
+            myStopwatch.Start();
             int n = 0;
-            foreach (int i in list1)
+            foreach (T i in list1)
             {
                 n++;
                 Console.WriteLine(n + " " + i);
             }
+            myStopwatch.Stop();
+            Console.WriteLine("Метод отработал за время {0}", myStopwatch.Elapsed);
             return null;
         }
 
-        public Item_of_List Find(int n)
-        {
-            Item_of_List elem = head;
-            while (elem.value != n | elem != null)
-            {
-                elem = elem.next;
-            }
-            if (elem.num == n) return elem;
-            else return null;
-
-        }
-        /*public Item_of_List Find(string value)
-        {
-            Item_of_List elem = head;
-            while (elem.value != value | elem != null)
-            {
-                elem = elem.next;
-            }
-            if (elem.value == value) return elem;
-            else return null;
-
-        }*/
-
-        public void Remove(int value)
+        public void Remove(T value)
         {
 
-            Item_of_List element = head, elementx = head;
+            Item_of_List<T> element = head, elementx = head;
             while (element.next != null)
             {
-                if (element.value == value)
+                if (element.value.Equals(value))
                 {
                     elementx.next = element.next;
                     element = element.next;
@@ -147,21 +130,6 @@ namespace Useless_Interfaces_for_Lists
             Console.ForegroundColor = ConsoleColor.Green;
 
         }
-        /*public void Remove(int n)
-        {
-            Item_of_List elem = head, lastElem = head;
-            while (lastElem.num != n)
-            {
-                if (elem.num == n)
-                {
-                    lastElem.next = elem.next;
-                    Renum();
-                    num--;
-                }
-                lastElem = elem;
-                elem = elem.next;
-            }
-        }*/
 
         public int GetLength()
         {
@@ -169,7 +137,7 @@ namespace Useless_Interfaces_for_Lists
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Количество элементов в списке: ");
             int i = 1;
-            Item_of_List element = head;
+            Item_of_List<T> element = head;
             while (element.next != null)
             {
                 i++;
@@ -183,7 +151,7 @@ namespace Useless_Interfaces_for_Lists
         public void Input_Output(int i)
         {
             int count = 1;
-            Item_of_List temp = head;
+            Item_of_List<T> temp = head;
 
             while (temp.next != null)
             {
@@ -205,24 +173,13 @@ namespace Useless_Interfaces_for_Lists
 
         }
 
-        /*private void Renum()
-        {
-            Item_of_List elem = head;
-            int i = 0;
-            while (elem != null)
-            {
-                elem.num = i++;
-                elem = elem.next;
-            }
-        }*/
-
-        public Item_of_List PoNomeru(int i)
+        public Item_of_List<T> PoNomeru(int i)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine();
             Console.Write("Значение по номеру: ");
             int count = 1;
-            Item_of_List temp = head;
+            Item_of_List<T> temp = head;
 
             while (temp.next != null)
             {
@@ -278,7 +235,35 @@ namespace Useless_Interfaces_for_Lists
             throw new NotImplementedException();
         }
 
-        bool ICollection<int>.Remove(int item)
+
+
+        public bool Contains(int item)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ICollection<T>.Remove(T item)
         {
             throw new NotImplementedException();
         }
@@ -287,66 +272,7 @@ namespace Useless_Interfaces_for_Lists
         {
             throw new NotImplementedException();
         }
-
-        public bool Contains(int item)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICollection<int>.Add(int item)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICollection<int>.Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        bool ICollection<int>.Contains(int item)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICollection<int>.CopyTo(int[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator<int> IEnumerable<int>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
-    /*public void Sort()
-    {
-        bool x = true;
-        while (true)
-        {
-            x = false;
-            for (var temp = head; temp.next != null; temp = temp.next)
-            {
-
-                if (temp < temp.next)
-                {
-                    continue;
-                }
-
-                Swap(temp, temp.next);
-                x = true;
-            }
-        }
-    }
-
-    private void Swap(Item_of_List temp, object next)
-    {
-        throw new NotImplementedException();
-    }*/
 }
 
 

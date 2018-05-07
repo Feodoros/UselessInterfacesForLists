@@ -6,31 +6,25 @@ using System.Threading.Tasks;
 
 namespace Useless_Interfaces_for_Lists
 {
-    class Item_of_List
+    class Item_of_List<T>
     {
-        public Item_of_List next;
+        public Item_of_List<T> next;
         public int num;
         public string stats;
-        public int value;
-        //public string value1;
+        public T value;
 
-        public Item_of_List(int value /*string value1*/)
+        public Item_of_List(T value)
         {
             this.value = value;
-            //this.value1 = value1;
+
             next = null;
         }
 
-        /*public Item_of_List(string value, int num)
-        {
-            this.value = value;
-            this.num = num;
-        }*/
 
-        public Item_of_List(int value /*string value1*/, Item_of_List next)
+        public Item_of_List(T value, Item_of_List<T> next)
         {
             this.value = value;
-            //this.value1 = value1;
+
             this.next = next;
         }
 
